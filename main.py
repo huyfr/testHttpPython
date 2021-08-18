@@ -1,4 +1,5 @@
 import requests as requests
+import tqdm
 
 HOST = 'http://127.0.0.1:9501'
 API = '/api?action=sendMessage'
@@ -39,6 +40,6 @@ def send_request(req):
 
 
 if __name__ == '__main__':
-    for i in range(1000000):
+    for i in tqdm.tqdm(range(1000)):
         request = compose_request(HOST, API, USER_NAME, PASSWORD, RECIPIENT, MESSAGE_BODY, i)
         response = send_request(request)
