@@ -1,4 +1,5 @@
 import requests as requests
+import tqdm
 
 HOST = 'http://192.168.37.129:8080'
 API = '/secure/send'
@@ -38,6 +39,6 @@ def send_request(body):
 
 
 if __name__ == '__main__':
-    for i in range(1000000):
+    for i in tqdm.tqdm(range(1000)):
         request = compose_request(RECIPIENT, MESSAGE_BODY, i)
         response = send_request(request)
