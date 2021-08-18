@@ -1,32 +1,31 @@
 import requests as requests
 
-HOST = 'http://127.0.0.1:9501'
-API = '/api?action=sendMessage'
-USER_NAME = 'admin'
-PASSWORD = 'admin'
+HOST = 'http://192.168.37.129:8080'
+API = '/secure/send'
+USER_NAME = 'huy'
+PASSWORD = 'huy'
 RECIPIENT = '0858358088'
-MESSAGE_BODY = 'Hello world from python 3 - '
-MESSAGE_SUCCESS = 'Message accepted for delivery'
+MESSAGE_BODY = 'Hello world from python 3 to jasmin - '
+MESSAGE_SUCCESS = 'Success'
 
 
-def compose_request(host, api, user_name, password, recipient, message_body, count):
-    req = ''
+def compose_request(recipient, message_body, count):
+    body = {}
     try:
-        req = host + api +\
-              '&username=' + requests.utils.quote(user_name) + \
-              '&password=' + requests.utils.quote(password) +\
-              '&recipient=' + requests.utils.quote(recipient) + \
-              '&messagedata=' + requests.utils.quote(message_body + str(count))
+        body['to'] = recipient
+        body['from'] = 'huy'
+        body['content'] = message_body + str(count)
+        body['dlr'] = 'no'
     except Exception as ex:
         print(f'Error at function compose_request with message: ', ex)
-    return req
+    return body
 
 
-def send_request(req):
+def send_request(body):
     result = False
     try:
-        if req != '':
-            resp = requests.post(req)
+        if len(body) > 0:
+            resp = requests.post(url=HOST + API, json=body, auth=(USER_NAME, PASSWORD))
             str_content = resp.content.decode('utf-8')
             if resp.status_code == 200 and MESSAGE_SUCCESS in str_content:
                 result = True
@@ -40,5 +39,5 @@ def send_request(req):
 
 if __name__ == '__main__':
     for i in range(1000000):
-        request = compose_request(HOST, API, USER_NAME, PASSWORD, RECIPIENT, MESSAGE_BODY, i)
+        request = compose_request(RECIPIENT, MESSAGE_BODY, i)
         response = send_request(request)
