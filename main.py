@@ -1,6 +1,5 @@
-import time
-
 import requests as requests
+import tqdm
 
 HOST = 'http://127.0.0.1:9509'
 API = '/api?action=sendmessage'
@@ -32,7 +31,7 @@ def send_request(req):
             str_content = resp.content.decode('utf-8')
             if resp.status_code == 200 and MESSAGE_SUCCESS in str_content:
                 result = True
-                print('Send SMS successful!')
+                # print('Send SMS successful!')
             else:
                 print('Fail while send SMS')
     except Exception as ex:
@@ -41,7 +40,6 @@ def send_request(req):
 
 
 if __name__ == '__main__':
-    print(f'Start time: ', time.time())
-    request = compose_request(HOST, API, USER_NAME, PASSWORD, RECIPIENT, MESSAGE_BODY, 1)
-    response = send_request(request)
-    print(f'End time: ', time.time())
+    for i in tqdm.tqdm(range(1000)):
+        request = compose_request(HOST, API, USER_NAME, PASSWORD, RECIPIENT, MESSAGE_BODY, 1)
+        response = send_request(request)
